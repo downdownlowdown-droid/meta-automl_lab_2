@@ -1,1 +1,1 @@
-# meta-automl_lab_2
+# Meta-AutoML Project
