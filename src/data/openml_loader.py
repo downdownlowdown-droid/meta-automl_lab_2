@@ -44,7 +44,9 @@ def list_openml_datasets(cfg: Dict[str, Any]) -> pd.DataFrame:
         miss = df["NumberOfMissingValues"].fillna(0)
         rows = df["NumberOfInstances"].replace(0, np.nan)
         approx_miss_ratio = miss / (rows * df["NumberOfFeatures"].clip(lower=1))
-        df = df[approx_miss_ratio.fillna(0) <= o["max_missing_ratio"]]
+        max_miss = o.get("max_missing_ratio", None) # Added check for max_missing_ratio
+        if max_miss is not None:
+            df = df[approx_miss_ratio.fillna(0) <= float(max_miss)]
     # Чистим экзотические датасеты без названия/целевой
     df = df[~df["name"].isna()]
     # Набросим случайный порядок для разнообразия
